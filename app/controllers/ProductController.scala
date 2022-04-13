@@ -1,13 +1,16 @@
 package controllers
 
 import play.api.mvc._
+import services.ProductService
+import javax.inject.{Inject, Singleton}
 
-import javax.inject.Inject
-
-class ProductController @Inject()(val controllerComponents: ControllerComponents) extends BaseController{
+@Singleton
+class ProductController @Inject()(productService: ProductService, val controllerComponents: ControllerComponents) extends BaseController{
 
   def index(): Action[AnyContent] = Action { implicit request: Request[AnyContent] =>
-    Ok(views.html.products.index())
+    val products = productService.getList
+    Ok(views.html.products.index(products))
   }
-
 }
+
+

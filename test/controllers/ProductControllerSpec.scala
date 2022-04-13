@@ -1,9 +1,12 @@
 package controllers
 
-import org.scalatestplus.play._
-import org.scalatestplus.play.guice._
+import akka.http.scaladsl.model.HttpHeader.ParsingResult.Ok
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.wordspec.AnyWordSpec
+import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import play.api.test.{FakeRequest, Injecting}
 import play.api.test.Helpers._
-import play.api.test._
+import services.ProductService
 
 /**
  * Add your spec here.
@@ -11,35 +14,19 @@ import play.api.test._
  *
  * For more information, see https://www.playframework.com/documentation/latest/ScalaTestingWithScalaTest
  */
-class ProductControllerSpec extends PlaySpec with GuiceOneAppPerTest with Injecting {
+class ProductControllerSpec extends AnyWordSpec with GuiceOneAppPerTest with Injecting with Matchers {
 
-  "ProductController GET" should {
+  "ProductController" should {
 
     "render the productList page from a new instance of controller" in {
-      val controller = new ProductController(stubControllerComponents())
+      val productService = new ProductService
+      val controller = new ProductController(productService, stubControllerComponents())
       val home = controller.index().apply(FakeRequest(GET, "/productList"))
 
-      status(home) mustBe OK
+      status(home) mustBe 200
       contentType(home) mustBe Some("text/html")
-      contentAsString(home) must include ("Product List")
+      contentAsString(home) must include("Product List")
     }
-
-//    "render the index page from the application" in {
-//      val controller = inject[ProductController]
-//      val home = controller.index().apply(FakeRequest(GET, "/"))
-//
-//      status(home) mustBe OK
-//      contentType(home) mustBe Some("text/html")
-//      contentAsString(home) must include ("Welcome to Play")
-//    }
-//
-//    "render the index page from the router" in {
-//      val request = FakeRequest(GET, "/")
-//      val home = route(app, request).get
-//
-//      status(home) mustBe OK
-//      contentType(home) mustBe Some("text/html")
-//      contentAsString(home) must include ("Welcome to Play")
-//    }
   }
+
 }
