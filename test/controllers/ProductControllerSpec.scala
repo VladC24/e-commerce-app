@@ -1,8 +1,11 @@
 package controllers
 
+import client.ProductClient
+import org.mockito.MockitoSugar.mock
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.play.guice.GuiceOneAppPerTest
+import play.api.libs.ws.WSClient
 import play.api.test.{FakeRequest, Injecting}
 import play.api.test.Helpers._
 import services.ProductService
@@ -18,7 +21,8 @@ class ProductControllerSpec extends AnyWordSpec with GuiceOneAppPerTest with Inj
   "ProductController" should {
 
     "render the productList page from a new instance of controller" in {
-      val productService = new ProductService
+      val client = mock[ProductClient]
+      val productService = new ProductService(client)
       val controller = new ProductController(productService, stubControllerComponents())
       val home = controller.index().apply(FakeRequest(GET, "/productList"))
 
