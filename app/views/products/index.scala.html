@@ -1,10 +1,16 @@
-@(products: List[Product])
+@(products: List[NewProduct])
 
 @main("Product List") {
 <h1>Product List</h1>
 <ul>
     @for(product <- products) {
-    <li>@product.name - @product.description -- Price: @product.price</li>
+    <li>
+        @product.id. @product.title -- Price: @product.price
+        <br>
+        @product.image
+        <p>@product.description</p>
+        <p>@product.category</p>
+    </li>
     }
 </ul>
 }
