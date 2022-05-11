@@ -8,11 +8,12 @@ import javax.inject.Inject
 import scala.concurrent._
 import ExecutionContext.Implicits.global
 import scala.concurrent.duration.DurationInt
+import play.api.Configuration
 
-class ProductClient @Inject()(ws: WSClient, baseUrl: String) {
+class ProductClient @Inject()(ws: WSClient, config: Configuration) {
 
   def getProducts: List[NewProduct] = {
-    val url = s"$baseUrl/products"
+    val url = s"${config.get[String]("baseUrl")}/products"
     val request = ws.url(url)
     val response = request.get()
     val newProduct = response.map { x =>
